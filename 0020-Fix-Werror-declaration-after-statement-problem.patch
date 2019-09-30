@@ -1,0 +1,36 @@
+From aaf3101ba81af8f488502881648e3f687721671e Mon Sep 17 00:00:00 2001
+From: Matthias Klose <doko@ubuntu.com>
+Date: Sat, 20 Sep 2014 06:37:04 -0400
+Subject: [PATCH 020/411] Fix -Werror=declaration-after-statement problem
+
+---
+ src/arm/ffi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/arm/ffi.c b/src/arm/ffi.c
+index 7cd9289..6691ab5 100644
+--- a/src/arm/ffi.c
++++ b/src/arm/ffi.c
+@@ -154,9 +154,6 @@ int ffi_prep_args_SYSV(char *stack, extended_cif *ecif, float *vfp_space)
+ 
+ int ffi_prep_args_VFP(char *stack, extended_cif *ecif, float *vfp_space)
+ {
+-  // make sure we are using FFI_VFP
+-  FFI_ASSERT(ecif->cif->abi == FFI_VFP);
+-
+   register unsigned int i, vi = 0;
+   register void **p_argv;
+   register char *argp, *regp, *eo_regp;
+@@ -165,6 +162,9 @@ int ffi_prep_args_VFP(char *stack, extended_cif *ecif, float *vfp_space)
+   char done_with_regs = 0;
+   char is_vfp_type;
+ 
++  // make sure we are using FFI_VFP
++  FFI_ASSERT(ecif->cif->abi == FFI_VFP);
++
+   /* the first 4 words on the stack are used for values passed in core
+    * registers. */
+   regp = stack;
+-- 
+1.8.3.1
+

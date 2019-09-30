@@ -1,0 +1,25 @@
+From b55e03665ddf2423df9baee0d3172892ba781c26 Mon Sep 17 00:00:00 2001
+From: Richard Henderson <rth@redhat.com>
+Date: Wed, 22 Oct 2014 12:33:59 -0400
+Subject: [PATCH 058/415] aarch64: Treat void return as not passed in registers
+
+This lets us do less post-processing when there's no return value.
+---
+ src/aarch64/ffi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/aarch64/ffi.c b/src/aarch64/ffi.c
+index 58d088b..6c338e1 100644
+--- a/src/aarch64/ffi.c
++++ b/src/aarch64/ffi.c
+@@ -383,6 +383,7 @@ is_register_candidate (ffi_type *ty)
+   switch (ty->type)
+     {
+     case FFI_TYPE_VOID:
++      return 0;
+     case FFI_TYPE_FLOAT:
+     case FFI_TYPE_DOUBLE:
+     case FFI_TYPE_LONGDOUBLE:
+-- 
+2.7.4.huawei.3
+

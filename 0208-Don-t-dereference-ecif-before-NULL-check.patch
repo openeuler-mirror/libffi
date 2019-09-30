@@ -1,0 +1,32 @@
+From cf4b2a50413ecb8931eb1a94437497694f189c47 Mon Sep 17 00:00:00 2001
+From: Tom Tromey <tom@tromey.com>
+Date: Fri, 17 Jun 2016 10:09:44 +0100
+Subject: [PATCH 208/411] Don't dereference "ecif" before NULL check
+
+Fixes #260
+---
+ src/microblaze/ffi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/microblaze/ffi.c b/src/microblaze/ffi.c
+index ea962ea..5733e6e 100644
+--- a/src/microblaze/ffi.c
++++ b/src/microblaze/ffi.c
+@@ -46,12 +46,12 @@ void ffi_prep_args(void* stack, extended_cif* ecif)
+ 	void** p_argv;
+ 	void* stack_args_p = stack;
+ 
+-	p_argv = ecif->avalue;
+-
+ 	if (ecif == NULL || ecif->cif == NULL) {
+ 		return; /* no description to prepare */
+ 	}
+ 
++	p_argv = ecif->avalue;
++
+ 	if ((ecif->cif->rtype != NULL) &&
+ 			(ecif->cif->rtype->type == FFI_TYPE_STRUCT))
+ 	{
+-- 
+1.8.3.1
+
