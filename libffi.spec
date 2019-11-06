@@ -1,8 +1,8 @@
 %global target_arch %{ix86} x86_64
 
 Name:		libffi
-Version:	3.1
-Release:	19
+Version:	3.2.1
+Release:	1
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
@@ -11,14 +11,9 @@ Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
 Source1:	ffi-multilib.h
 Source2:	ffitarget-multilib.h
 Patch0:		libffi-3.1-fix-include-path.patch
-Patch1:		libffi-3.1-fix-exec-stack.patch
-Patch2:		libffi-aarch64-rhbz1174037.patch
-Patch3:		libffi-3.1-aarch64-fix-exec-stack.patch
+Patch1:		libffi-aarch64-rhbz1174037.patch
+Patch2:		libffi-3.1-aarch64-fix-exec-stack.patch
 
-Patch6000:0012-Fix-non-variadic-CIF-initialization-for-Apple-ARM64.patch
-Patch6001:0013-Fix-alignment-of-FFI_TYPE_FLOAT-for-Apple-s-ARM64-AB.patch
-Patch6002:0020-Fix-Werror-declaration-after-statement-problem.patch
-Patch6003:0052-aarch64-Fix-non-apple-compilation.patch
 Patch6004:0053-aarch64-Improve-is_hfa.patch
 Patch6005:0054-aarch64-Always-distinguish-LONGDOUBLE.patch
 Patch6006:0055-aarch64-Simplify-AARCH64_STACK_ALIGN.patch
@@ -130,5 +125,11 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Fri Oct 11 2019 hanzhijun<hanzhijun1@huawei.com> - 3.2.1-1
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update to 3.2.1
+
 * Mon Sep 09 2019 openEuler Buildteam <buildteam@openeuler.org> - 3.1-19
 - Package init
