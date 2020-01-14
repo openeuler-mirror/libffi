@@ -1,6 +1,6 @@
 Name:		libffi
 Version:	3.3
-Release:	3
+Release:	4
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libff
@@ -89,7 +89,6 @@ fi
 
 %files
 %license LICENSE
-%{_libdir}/*.so.*
 
 %files -n libffi7
 %{_libdir}/*.so.7*
@@ -107,6 +106,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Wed Jan 15 2020 chengquan<chengquan3@huawei.com> - 3.3-4
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:remove dynamic library from main package
+
 * Tue Jan 14 2020 chengquan<chengquan3@huawei.com> - 3.3-3
 - Type:enhancement
 - ID:NA
