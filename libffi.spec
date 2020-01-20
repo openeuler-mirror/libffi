@@ -1,14 +1,12 @@
 Name:		libffi
 Version:	3.3
-Release:	5
+Release:	6
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libff
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
-BuildRequires: libffi6
-Requires: libffi6 libffi7
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -40,18 +38,6 @@ Requires:	pkgconfig
 %description	devel
 The devel package with header files and libraries is for developing apps which needs libffi.
 
-%package -n libffi7
-Summary:A Portable Foreign Function Interface Library
-
-%description -n libffi7
-libffi.so.7 for %{name}
-
-%package -n libffi6
-Summary:A Portable Foreign Function Interface Library
-
-%description -n libffi6
-libffi.so.6 for %{name}
-
 %package        help
 Summary:        libffi help
 Requires:       info
@@ -71,8 +57,6 @@ The help package contains man files.
 %make_install
 %delete_la
 
-cp -a %{_libdir}/libffi.so.6* %{buildroot}%{_libdir}
-
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
 %ldconfig_scriptlets
@@ -90,12 +74,7 @@ fi
 
 %files
 %license LICENSE
-
-%files -n libffi7
-%{_libdir}/*.so.7*
-
-%files -n libffi6
-%{_libdir}/*.so.6*
+%{_libdir}/*.so.*
 
 %files devel
 %{_libdir}/pkgconfig/*.pc
@@ -107,6 +86,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Mon Jan 20 2020 chengquan<chengquan3@huawei.com> - 3.3-6
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:Remove temporary dynamic library solution
+
 * Wed Jan 15 2020 chengquan<chengquan3@huawei.com> - 3.3-5
 - Type:enhancement
 - ID:NA
