@@ -1,12 +1,12 @@
 Name:		libffi
 Version:	3.3
-Release:	6
+Release:	7
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libff
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
 
-BuildRequires: gcc
+BuildRequires: gcc gdb
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -86,6 +86,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Sat Mar 21 2020 chengquan<chengquan3@huawei.com> - 3.3-7
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:add necessary BuildRequires
+
 * Mon Jan 20 2020 chengquan<chengquan3@huawei.com> - 3.3-6
 - Type:enhancement
 - ID:NA
