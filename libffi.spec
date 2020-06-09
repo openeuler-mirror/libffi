@@ -1,6 +1,6 @@
 Name:		libffi
 Version:	3.3
-Release:	7
+Release:	8
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libff
@@ -50,7 +50,12 @@ The help package contains man files.
 %autosetup -n %{name}-%{version}
 
 %build
-%configure --disable-static
+%configure \
+%ifarch riscv64
+	--disable-multi-os-directory \
+%endif
+	--disable-static
+	
 %make_build
 
 %install
@@ -86,6 +91,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Sat May 28 2020 whoisxxx<zhangxuzhou4@huawei.com> - 3.3-8
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:Disable multi os directory to avoid compile failure for RISC-V
+
 * Sat Mar 21 2020 chengquan<chengquan3@huawei.com> - 3.3-7
 - Type:enhancement
 - ID:NA
