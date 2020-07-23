@@ -1,9 +1,9 @@
 Name:		libffi
 Version:	3.3
-Release:	8
+Release:	9
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
-URL:		http://sourceware.org/libff
+URL:		http://sourceware.org/libffi
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc gdb
@@ -91,6 +91,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Thu Jul 23 2020 Zhipeng Xie<xiezhipeng1@huawei.com> - 3.3-9
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:fix URL
+
 * Sat May 28 2020 whoisxxx<zhangxuzhou4@huawei.com> - 3.3-8
 - Type:enhancement
 - ID:NA
