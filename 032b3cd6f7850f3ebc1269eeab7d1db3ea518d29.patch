@@ -1,0 +1,152 @@
+diff --git a/src/arm/ffi.c b/src/arm/ffi.c
+index efea031f..00583900 100644
+--- a/src/arm/ffi.c
++++ b/src/arm/ffi.c
+@@ -426,12 +426,14 @@ ffi_call (ffi_cif *cif, void (*fn) (void), void *rvalue, void **avalue)
+   ffi_call_int (cif, fn, rvalue, avalue, NULL);
+ }
+ 
++#ifdef FFI_GO_CLOSURES
+ void
+ ffi_call_go (ffi_cif *cif, void (*fn) (void), void *rvalue,
+ 	     void **avalue, void *closure)
+ {
+   ffi_call_int (cif, fn, rvalue, avalue, closure);
+ }
++#endif
+ 
+ static void *
+ ffi_prep_incoming_args_SYSV (ffi_cif *cif, void *rvalue,
+@@ -569,8 +571,11 @@ ffi_closure_inner_VFP (ffi_cif *cif,
+ 
+ void ffi_closure_SYSV (void) FFI_HIDDEN;
+ void ffi_closure_VFP (void) FFI_HIDDEN;
++
++#ifdef FFI_GO_CLOSURES
+ void ffi_go_closure_SYSV (void) FFI_HIDDEN;
+ void ffi_go_closure_VFP (void) FFI_HIDDEN;
++#endif
+ 
+ /* the cif must already be prep'ed */
+ 
+@@ -637,6 +642,7 @@ ffi_prep_closure_loc (ffi_closure * closure,
+   return FFI_OK;
+ }
+ 
++#ifdef FFI_GO_CLOSURES
+ ffi_status
+ ffi_prep_go_closure (ffi_go_closure *closure, ffi_cif *cif,
+ 		     void (*fun) (ffi_cif *, void *, void **, void *))
+@@ -658,6 +664,7 @@ ffi_prep_go_closure (ffi_go_closure *closure, ffi_cif *cif,
+ 
+   return FFI_OK;
+ }
++#endif
+ 
+ /* Below are routines for VFP hard-float support. */
+ 
+diff --git a/src/x86/ffi.c b/src/x86/ffi.c
+index 5903793d..5f7fd81d 100644
+--- a/src/x86/ffi.c
++++ b/src/x86/ffi.c
+@@ -397,12 +397,14 @@ ffi_call (ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
+   ffi_call_int (cif, fn, rvalue, avalue, NULL);
+ }
+ 
++#ifdef FFI_GO_CLOSURES
+ void
+ ffi_call_go (ffi_cif *cif, void (*fn)(void), void *rvalue,
+ 	     void **avalue, void *closure)
+ {
+   ffi_call_int (cif, fn, rvalue, avalue, closure);
+ }
++#endif
+ 
+ /** private members **/
+ 
+@@ -575,6 +577,8 @@ ffi_prep_closure_loc (ffi_closure* closure,
+   return FFI_OK;
+ }
+ 
++#ifdef FFI_GO_CLOSURES
++
+ void FFI_HIDDEN ffi_go_closure_EAX(void);
+ void FFI_HIDDEN ffi_go_closure_ECX(void);
+ void FFI_HIDDEN ffi_go_closure_STDCALL(void);
+@@ -611,6 +615,8 @@ ffi_prep_go_closure (ffi_go_closure* closure, ffi_cif* cif,
+   return FFI_OK;
+ }
+ 
++#endif /* FFI_GO_CLOSURES */
++
+ /* ------- Native raw API support -------------------------------- */
+ 
+ #if !FFI_NO_RAW_API
+diff --git a/src/x86/ffi64.c b/src/x86/ffi64.c
+index ed82e235..39f95981 100644
+--- a/src/x86/ffi64.c
++++ b/src/x86/ffi64.c
+@@ -688,6 +688,8 @@ ffi_call (ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
+   ffi_call_int (cif, fn, rvalue, avalue, NULL);
+ }
+ 
++#ifdef FFI_GO_CLOSURES
++
+ #ifndef __ILP32__
+ extern void
+ ffi_call_go_efi64(ffi_cif *cif, void (*fn)(void), void *rvalue,
+@@ -708,6 +710,7 @@ ffi_call_go (ffi_cif *cif, void (*fn)(void), void *rvalue,
+   ffi_call_int (cif, fn, rvalue, avalue, closure);
+ }
+ 
++#endif /* FFI_GO_CLOSURES */
+ 
+ extern void ffi_closure_unix64(void) FFI_HIDDEN;
+ extern void ffi_closure_unix64_sse(void) FFI_HIDDEN;
+@@ -856,6 +859,8 @@ ffi_closure_unix64_inner(ffi_cif *cif,
+   return flags;
+ }
+ 
++#ifdef FFI_GO_CLOSURES
++
+ extern void ffi_go_closure_unix64(void) FFI_HIDDEN;
+ extern void ffi_go_closure_unix64_sse(void) FFI_HIDDEN;
+ 
+@@ -885,4 +890,6 @@ ffi_prep_go_closure (ffi_go_closure* closure, ffi_cif* cif,
+   return FFI_OK;
+ }
+ 
++#endif /* FFI_GO_CLOSURES */
++
+ #endif /* __x86_64__ */
+diff --git a/src/x86/ffiw64.c b/src/x86/ffiw64.c
+index 034dffda..a43a9ebe 100644
+--- a/src/x86/ffiw64.c
++++ b/src/x86/ffiw64.c
+@@ -187,7 +187,10 @@ EFI64(ffi_call_go)(ffi_cif *cif, void (*fn)(void), void *rvalue,
+ 
+ 
+ extern void ffi_closure_win64(void) FFI_HIDDEN;
++
++#ifdef FFI_GO_CLOSURES
+ extern void ffi_go_closure_win64(void) FFI_HIDDEN;
++#endif
+ 
+ ffi_status
+ EFI64(ffi_prep_closure_loc)(ffi_closure* closure,
+@@ -227,6 +230,7 @@ EFI64(ffi_prep_closure_loc)(ffi_closure* closure,
+   return FFI_OK;
+ }
+ 
++#ifdef FFI_GO_CLOSURES
+ ffi_status
+ EFI64(ffi_prep_go_closure)(ffi_go_closure* closure, ffi_cif* cif,
+ 		     void (*fun)(ffi_cif*, void*, void**, void*))
+@@ -246,6 +250,7 @@ EFI64(ffi_prep_go_closure)(ffi_go_closure* closure, ffi_cif* cif,
+ 
+   return FFI_OK;
+ }
++#endif
+ 
+ struct win64_closure_frame
+ {
