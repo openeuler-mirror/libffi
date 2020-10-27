@@ -1,0 +1,13 @@
+diff --git a/configure.host b/configure.host
+index c7d63fd9..d9623e92 100644
+--- a/configure.host
++++ b/configure.host
+@@ -222,7 +222,7 @@ case "${host}" in
+ 	TARGET=POWERPC_FREEBSD; TARGETDIR=powerpc
+ 	CFLAGS="$CFLAGS -D__NO_FPRS__"
+ 	;;
+-  powerpc64-*-freebsd*)
++  powerpc64-*-freebsd* | powerpc64le-*-freebsd*)
+ 	TARGET=POWERPC; TARGETDIR=powerpc
+ 	;;
+   powerpc*-*-rtems*)
