@@ -1,0 +1,78 @@
+diff --git a/src/powerpc/linux64.S b/src/powerpc/linux64.S
+index c99889c1..e92d64af 100644
+--- a/src/powerpc/linux64.S
++++ b/src/powerpc/linux64.S
+@@ -36,8 +36,10 @@
+ 	.cfi_startproc
+ # if _CALL_ELF == 2
+ ffi_call_LINUX64:
++#  ifndef __PCREL__
+ 	addis	%r2, %r12, .TOC.-ffi_call_LINUX64@ha
+ 	addi	%r2, %r2, .TOC.-ffi_call_LINUX64@l
++#  endif
+ 	.localentry ffi_call_LINUX64, . - ffi_call_LINUX64
+ # else
+ 	.section	".opd","aw"
+@@ -89,9 +91,15 @@ ffi_call_LINUX64:
+ 	/* Call ffi_prep_args64.  */
+ 	mr	%r4, %r1
+ # if defined _CALL_LINUX || _CALL_ELF == 2
++#  ifdef __PCREL__
++	bl	ffi_prep_args64@notoc
++#  else
+ 	bl	ffi_prep_args64
++	nop
++#  endif
+ # else
+ 	bl	.ffi_prep_args64
++	nop
+ # endif
+ 
+ # if _CALL_ELF == 2
+diff --git a/src/powerpc/linux64_closure.S b/src/powerpc/linux64_closure.S
+index d67e4bbb..3469a2cb 100644
+--- a/src/powerpc/linux64_closure.S
++++ b/src/powerpc/linux64_closure.S
+@@ -37,8 +37,10 @@
+ 	.cfi_startproc
+ # if _CALL_ELF == 2
+ ffi_closure_LINUX64:
++#  ifndef __PCREL__
+ 	addis	%r2, %r12, .TOC.-ffi_closure_LINUX64@ha
+ 	addi	%r2, %r2, .TOC.-ffi_closure_LINUX64@l
++#  endif
+ 	.localentry ffi_closure_LINUX64, . - ffi_closure_LINUX64
+ # else
+ 	.section        ".opd","aw"
+@@ -190,11 +192,19 @@ ffi_closure_LINUX64:
+ 
+ 	# make the call
+ # if defined _CALL_LINUX || _CALL_ELF == 2
++#  ifdef __PCREL__
++	bl ffi_closure_helper_LINUX64@notoc
++.Lret:
++#  else
+ 	bl ffi_closure_helper_LINUX64
++.Lret:
++	nop
++#  endif
+ # else
+ 	bl .ffi_closure_helper_LINUX64
+-# endif
+ .Lret:
++	nop
++# endif
+ 
+ 	# now r3 contains the return type
+ 	# so use it to look up in a table
+@@ -460,8 +470,10 @@ ffi_closure_LINUX64:
+ 	.cfi_startproc
+ # if _CALL_ELF == 2
+ ffi_go_closure_linux64:
++#  ifndef __PCREL__
+ 	addis	%r2, %r12, .TOC.-ffi_go_closure_linux64@ha
+ 	addi	%r2, %r2, .TOC.-ffi_go_closure_linux64@l
++#  endif
+ 	.localentry ffi_go_closure_linux64, . - ffi_go_closure_linux64
+ # else
+ 	.section        ".opd","aw"
