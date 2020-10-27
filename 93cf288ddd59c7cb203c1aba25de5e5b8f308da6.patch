@@ -1,0 +1,13 @@
+diff --git a/testsuite/libffi.closures/huge_struct.c b/testsuite/libffi.closures/huge_struct.c
+index 1915c3f1..e8e1d860 100644
+--- a/testsuite/libffi.closures/huge_struct.c
++++ b/testsuite/libffi.closures/huge_struct.c
+@@ -9,6 +9,8 @@
+ /* { dg-options -mlong-double-128 { target powerpc64*-*-linux* } } */
+ /* { dg-options -Wformat=0 { target moxie*-*-elf or1k-*-* } } */
+ 
++#include <inttypes.h>
++
+ #include "ffitest.h"
+ 
+ typedef	struct BigStruct{
