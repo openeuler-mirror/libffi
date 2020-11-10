@@ -1,10 +1,12 @@
 Name:		libffi
 Version:	3.3
-Release:	9
+Release:	10
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
+Patch6000: d817d0daa312c58548d7a081aa876027ca103766.patch
+Patch6001: 8cc8f446f5aac13e107161dffbc15d1ee1a58878.patch
 
 BuildRequires: gcc gdb
 
@@ -91,6 +93,9 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* 20201110203007631098 patch-tracking 3.3-10
+- append patch file of upstream repository from <d817d0daa312c58548d7a081aa876027ca103766> to <8cc8f446f5aac13e107161dffbc15d1ee1a58878>
+
 * Thu Jul 23 2020 Zhipeng Xie<xiezhipeng1@huawei.com> - 3.3-9
 - Type:bugfix
 - ID:NA
