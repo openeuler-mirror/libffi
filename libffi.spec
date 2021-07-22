@@ -1,13 +1,13 @@
 Name:		libffi
 Version:	3.3
-Release:	10
+Release:	11
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
-Patch6000: e70bf987daa7b7b5df2de7579d5c51a888e8bf7d.patch
+Patch6000:	e70bf987daa7b7b5df2de7579d5c51a888e8bf7d.patch
 
-BuildRequires: gcc gdb
+BuildRequires:	gcc
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -92,6 +92,9 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Thu Jul 22 2021 panxiaohe<panxiaohe@huawei.com> - 3.3-11
+- remove unnecessary BuildRequires: gdb
+
 * 20201125083007628982 patch-tracking 3.3-10
 - append patch file of upstream repository from <e70bf987daa7b7b5df2de7579d5c51a888e8bf7d> to <e70bf987daa7b7b5df2de7579d5c51a888e8bf7d>
 
@@ -147,7 +150,7 @@ fi
 - Type:enhancement
 - ID:NA
 - SUG:NA
-- DESC:update softwre to 3.3
+- DESC:update software to 3.3
 
 * Fri Oct 11 2019 hanzhijun<hanzhijun1@huawei.com> - 3.2.1-1
 - Type:enhancement
