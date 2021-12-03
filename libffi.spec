@@ -1,13 +1,14 @@
 Name:		libffi
-Version:	3.3
-Release:	11
+Version:	3.4.2
+Release:	1
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
-Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
-Patch6000:	e70bf987daa7b7b5df2de7579d5c51a888e8bf7d.patch
+Source0:	https://github.com/libffi/libffi/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source1:	ffi-multilib.h
+Source2:	ffitarget-multilib.h
 
-BuildRequires:	gcc
+BuildRequires:	gcc gcc-c++ dejagnu libffi
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -55,7 +56,7 @@ The help package contains man files.
 %ifarch riscv64
 	--disable-multi-os-directory \
 %endif
-	--disable-static
+	--disable-static --disable-exec-static-tramp
 	
 %make_build
 
@@ -63,12 +64,13 @@ The help package contains man files.
 %make_install
 %delete_la
 
+cp -a %{_libdir}/libffi.so.7* $RPM_BUILD_ROOT%{_libdir}
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
 %ldconfig_scriptlets
 
 %check
-make check
+%make_build check
 
 %post help
 /sbin/install-info --info-dir=%{_infodir} %{_infodir}/libffi.info.gz || :
@@ -92,6 +94,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Fri Dec 3 2021 panxiaohe<panxiaohe@huawei.com> - 3.4.2-1
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:update version to 3.4.2
+
 * Thu Jul 22 2021 panxiaohe<panxiaohe@huawei.com> - 3.3-11
 - remove unnecessary BuildRequires: gdb
 
