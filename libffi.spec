@@ -1,12 +1,14 @@
 Name:		libffi
 Version:	3.3
-Release:	7
+Release:	8
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libff
 Source0:	ftp://sourceware.org/pub/libffi/%{name}-%{version}.tar.gz
 
-BuildRequires: gcc gdb
+Patch0: 	Add-gcc-bug-tests-back.patch
+
+BuildRequires:  gcc gcc-c++ dejagnu
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -47,7 +49,7 @@ BuildArch:      noarch
 The help package contains man files.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -n %{name}-%{version} -p1
 
 %build
 %configure --disable-static
@@ -86,6 +88,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Mon Dec 6 2021 panxiaohe<panxiaohe@huawei.com> - 3.3-8
+- Type:enhancement
+- ID:NA
+- SUG:NA
+- DESC:enable test suite execution
+
 * Sat Mar 21 2020 chengquan<chengquan3@huawei.com> - 3.3-7
 - Type:enhancement
 - ID:NA
