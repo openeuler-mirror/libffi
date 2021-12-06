@@ -1,0 +1,125 @@
+From 2e90bb5577ea1fe3bc1716954e790999bc3549f7 Mon Sep 17 00:00:00 2001
+From: Anthony Green <green@moxielogic.com>
+Date: Sun, 7 Jun 2020 14:31:06 -0400
+Subject: [PATCH] Add gcc bug tests back
+
+---
+ testsuite/lib/libffi.exp                 | 24 ++++++++++++++++++++++--
+ testsuite/libffi.bhaible/test-call.c     |  8 ++++----
+ testsuite/libffi.bhaible/test-callback.c |  4 ++--
+ 3 files changed, 28 insertions(+), 8 deletions(-)
+
+diff --git a/testsuite/lib/libffi.exp b/testsuite/lib/libffi.exp
+index c02adf9..d3c17db 100644
+--- a/testsuite/lib/libffi.exp
++++ b/testsuite/lib/libffi.exp
+@@ -24,6 +24,11 @@ load_lib libgloss.exp
+ load_gcc_lib target-libpath.exp
+ load_gcc_lib wrapper.exp
+ 
++proc check_effective_target_gccbug { } {
++    global has_gccbug
++    return $has_gccbug
++}
++
+ # Return 1 if the target matches the effective target 'arg', 0 otherwise.
+ # This can be used with any check_* proc that takes no argument and
+ # returns only 1 or 0.  It could be used with check_* procs that take
+@@ -477,6 +482,7 @@ proc libffi-dg-runtest { testcases default-extra-flags } {
+ 
+ proc run-many-tests { testcases extra_flags } {
+     global compiler_vendor
++    global has_gccbug
+     global env
+     switch $compiler_vendor {
+       "clang" {
+@@ -538,8 +544,22 @@ proc run-many-tests { testcases extra_flags } {
+         foreach opt $optimizations {
+             foreach abi $abis {
+                 set options [concat $common $opt $abi]
+-                verbose "Testing $testname, $options" 1
+-                dg-test $test $options ""
++		set has_gccbug false;
++		if { [string match $compiler_vendor "gnu"] \
++			 && [string match "*MSABI*" $abi] \
++			 && ( ( [string match "*DGTEST=57 *" $common] \
++				    && [string match "*call.c*" $testname] ) \
++				  || ( [string match "*DGTEST=54 *" $common] \
++					   && [string match "*callback*" $testname] ) \
++				  || [string match "*DGTEST=55 *" $common] \
++				  || [string match "*DGTEST=56 *" $common] ) } then {
++		    if [libffi_feature_test "#if (__GNUC__ < 9) || ((__GNUC__ == 9) && (__GNUC_MINOR__ < 3))"] {
++			set has_gccbug true;
++		    }
++		}
++		verbose "Testing $testname, $options" 1
++		verbose "has_gccbug = $has_gccbug" 1
++		dg-test $test $options ""
+             }
+         }
+     }
+diff --git a/testsuite/libffi.bhaible/test-call.c b/testsuite/libffi.bhaible/test-call.c
+index 01a8a21..cf9219e 100644
+--- a/testsuite/libffi.bhaible/test-call.c
++++ b/testsuite/libffi.bhaible/test-call.c
+@@ -4,7 +4,7 @@
+ 
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+-  the Free Software Foundation; either version 2 of the License, or
++  the Free Software Foundation; either version 3 of the License, or
+   (at your option) any later version.
+ 
+   This program is distributed in the hope that it will be useful,
+@@ -16,7 +16,7 @@
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+ 
+-/* { dg-do run } */
++/* { dg-do run { xfail gccbug } } */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -1220,7 +1220,7 @@ void
+   }
+   fprintf(out,"->{%g}\n",Fr.x);
+   fflush(out);
+-#endif
++#endif  
+ #if (!defined(DGTEST)) || DGTEST == 56  
+   Dr = D_fDd(f1,D2,d3);
+   fprintf(out,"->{%g}\n",Dr.x);
+@@ -1243,7 +1243,7 @@ void
+   }
+   fprintf(out,"->{%g}\n",Dr.x);
+   fflush(out);
+-#endif
++#endif  
+ #if (!defined(DGTEST)) || DGTEST == 57  
+   Dr = D_Dfd(D1,f2,d3);
+   fprintf(out,"->{%g}\n",Dr.x);
+diff --git a/testsuite/libffi.bhaible/test-callback.c b/testsuite/libffi.bhaible/test-callback.c
+index c2633c7..0b16799 100644
+--- a/testsuite/libffi.bhaible/test-callback.c
++++ b/testsuite/libffi.bhaible/test-callback.c
+@@ -4,7 +4,7 @@
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
++ * the Free Software Foundation; either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+@@ -16,7 +16,7 @@
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+-/* { dg-do run } */
++/* { dg-do run { xfail gccbug } } */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-- 
+1.8.3.1
+
