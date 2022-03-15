@@ -1,6 +1,6 @@
 Name:		libffi
 Version:	3.4.2
-Release:	1
+Release:	2
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
@@ -8,7 +8,7 @@ Source0:	https://github.com/libffi/libffi/releases/download/v%{version}/%{name}-
 Source1:	ffi-multilib.h
 Source2:	ffitarget-multilib.h
 
-BuildRequires:	gcc gcc-c++ dejagnu libffi
+BuildRequires:	gcc gcc-c++ dejagnu
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -64,7 +64,6 @@ The help package contains man files.
 %make_install
 %delete_la
 
-cp -a %{_libdir}/libffi.so.7* $RPM_BUILD_ROOT%{_libdir}
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
 %ldconfig_scriptlets
@@ -94,6 +93,9 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Tue Mar 15 2022 panxiaohe<panxh.life@foxmail.com> - 3.4.2-2
+- delete useless old version dynamic library
+
 * Fri Dec 3 2021 panxiaohe<panxiaohe@huawei.com> - 3.4.2-1
 - Type:enhancement
 - ID:NA
