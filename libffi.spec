@@ -1,12 +1,15 @@
 Name:		libffi
 Version:	3.4.2
-Release:	2
+Release:	3
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
 Source0:	https://github.com/libffi/libffi/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:	ffi-multilib.h
 Source2:	ffitarget-multilib.h
+
+Patch0:  backport-x86-64-Always-double-jump-table-slot-size-for-CET-71.patch
+Patch1:  backport-Fix-check-for-invalid-varargs-arguments-707.patch
 
 BuildRequires:	gcc gcc-c++ dejagnu
 
@@ -49,7 +52,7 @@ BuildArch:      noarch
 The help package contains man files.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %configure \
@@ -93,6 +96,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Sat Aug 27 2022 yixiangzhike <yixiangzhike007@163.com> - 3.4.2-3
+- Type:bugfix
+- CVE:NA
+- SUG:NA
+- DESC:backport patches from upstream
+
 * Tue Mar 15 2022 panxiaohe<panxh.life@foxmail.com> - 3.4.2-2
 - delete useless old version dynamic library
 
