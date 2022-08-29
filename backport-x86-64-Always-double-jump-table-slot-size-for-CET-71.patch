@@ -1,0 +1,54 @@
+From 3ac265d5c0e038e324bae29131dbc4bacb4935ea Mon Sep 17 00:00:00 2001
+From: hjl-tools <hjl.tools@gmail.com>
+Date: Sun, 15 May 2022 18:43:56 -0700
+Subject: [PATCH] x86-64: Always double jump table slot size for CET (#710)
+ (#711)
+ 
+When CET is enabled, double jump table slot size to add 4 bytes of ENDBR64
+for CET.  Since CET enabled clang doesn't have the LLVM assembler bug:
+ 
+https://bugs.llvm.org/show_bug.cgi?id=21501
+ 
+fixed by
+ 
+commit 04d39260d64e08b8bfb3844109ad43d4055b2e8d
+Author: Rafael Espindola <rafael.espindola@gmail.com>
+Date:   Wed Nov 4 23:50:29 2015 +0000
+ 
+    Simplify .org processing and make it a bit more powerful.
+ 
+we can use .org to allocate jump table slot size to 16 bytes.
+ 
+Conflict:NA
+Reference:https://github.com/libffi/libffi/commit/3ac265d5c0e038e324bae29131dbc4bacb4935ea
+---
+ src/x86/unix64.S | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+ 
+diff --git a/src/x86/unix64.S b/src/x86/unix64.S
+index 8cf3a23..d9c5bd4 100644
+--- a/src/x86/unix64.S
++++ b/src/x86/unix64.S
+@@ -39,14 +39,13 @@
+    actual table.  The entry points into the table are all 8 bytes.
+    The use of ORG asserts that we're at the correct location.  */
+ /* ??? The clang assembler doesn't handle .org with symbolic expressions.  */
+-#if defined(__clang__) || defined(__APPLE__) || (defined (__sun__) && defined(__svr4__))
++#ifdef __CET__
++/* Double slot size to 16 byte to add 4 bytes of ENDBR64.  */
++# define E(BASE, X)	.balign 8; .org BASE + X * 16
++#elif defined(__clang__) || defined(__APPLE__) || (defined (__sun__) && defined(__svr4__))
+ # define E(BASE, X)	.balign 8
+ #else
+-# ifdef __CET__
+-#  define E(BASE, X)	.balign 8; .org BASE + X * 16
+-# else
+-#  define E(BASE, X)	.balign 8; .org BASE + X * 8
+-# endif
++# define E(BASE, X)	.balign 8; .org BASE + X * 8
+ #endif
+ 
+ /* ffi_call_unix64 (void *args, unsigned long bytes, unsigned flags,
+-- 
+2.23.0
+ 
