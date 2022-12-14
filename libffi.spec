@@ -1,6 +1,6 @@
 Name:		libffi
 Version:	3.4.2
-Release:	3
+Release:	4
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
@@ -12,6 +12,7 @@ Patch0:  backport-x86-64-Always-double-jump-table-slot-size-for-CET-71.patch
 Patch1:  backport-Fix-check-for-invalid-varargs-arguments-707.patch
 
 BuildRequires:	gcc gcc-c++ dejagnu
+BuildRequires:  make
 
 %description
 Compilers for high level languages generate code that follows certain conventions. These
@@ -96,6 +97,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Wed Dec 14 2022 yixiangzhike <yixiangzhike007@163.com> - 3.4.2-4
+- Type:bugfix
+- CVE:NA
+- SUG:NA
+- DESC:Add BuildRequires:make
+
 * Sat Aug 27 2022 yixiangzhike <yixiangzhike007@163.com> - 3.4.2-3
 - Type:bugfix
 - CVE:NA
