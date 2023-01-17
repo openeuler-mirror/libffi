@@ -1,6 +1,6 @@
 Name:		libffi
 Version:	3.4.2
-Release:	5
+Release:	6
 Summary:	A Portable Foreign Function Interface Library
 License:	MIT
 URL:		http://sourceware.org/libffi
@@ -11,6 +11,7 @@ Source2:	ffitarget-multilib.h
 Patch0:  backport-x86-64-Always-double-jump-table-slot-size-for-CET-71.patch
 Patch1:  backport-Fix-check-for-invalid-varargs-arguments-707.patch
 Patch2:  libffi-Add-sw64-architecture.patch
+Patch3:  riscv-extend-return-types-smaller-than-ffi_arg.patch
 
 BuildRequires:	gcc gcc-c++ dejagnu
 BuildRequires:  make
@@ -98,6 +99,12 @@ fi
 %{_infodir}/libffi.info.gz
 
 %changelog
+* Mon Jan 16 2023 laokz<zhangkai@iscas.ac.cn> - 3.4.2-6
+- Type:bugfix
+- CVE:NA
+- SUG:NA
+- DESC:Backport upstream patch to fix riscv %check error
+
 * Sat Dec 17 2022 chenziyang<chenziyang4@huawei.com> - 3.4.2-5
 - Type:feature
 - CVE:NA
